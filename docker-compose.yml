@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  flask_rest_api:
+    container_name: flask_rest_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python -u app.py
+    ports:
+      - ${FLASK_PORT}:${FLASK_PORT}
+    volumes:
+      - .:/code
+    networks:
+      - database
+
+networks:
+  database:
+    external:
+      name: ${DATABASE_NETWORK}
+

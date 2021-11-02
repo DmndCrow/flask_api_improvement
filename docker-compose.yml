@@ -11,10 +11,10 @@ services:
     volumes:
       - .:/code
     networks:
-      - database
+      - database_network
 
 networks:
-  database:
+  database_network:
     external:
       name: ${DATABASE_NETWORK}
 

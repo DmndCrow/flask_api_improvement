@@ -6,16 +6,13 @@ load_dotenv()
 
 
 class DbConfig:
-    database = ''
-    user = ''
-    password = ''
-    host = ''
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////db/base.db'
-    SQLALCHEMY_BINDS = {
-        'elastic': 'sqlite:////db/elastic.db',
-        'neo4j': 'sqlite:////db/neo4j.db'
-    }
- 
+    NEO4J_HOST = os.getenv('NEO4J_HOST')
+    NEO4J_PORT = os.getenv('NEO4J_PORT')
+    NEO4J_USERNAME = os.getenv('NEO4J_USERNAME')
+    NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD')
+
+    NEO4J_URL = f'neo4j://{NEO4J_HOST}:{NEO4J_PORT}'
+
 
 class Config:
     """Set Flask configuration from .env file."""

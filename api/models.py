@@ -3,7 +3,7 @@ from . import db
 
 
 class Person(db.Model):
-    __bind_key__ = 'elastic'
+    # __bind_key__ = 'elastic'
     __tablename__ = 'person'
 
     id = db.Column(db.String(100), primary_key=True)
@@ -20,7 +20,7 @@ class Person(db.Model):
 
 
 class Organization(db.Model):
-    __bind_key__ = 'elastic'
+    # __bind_key__ = 'elastic'
     __tablename__ = 'organization'
 
     group_id = db.Column(db.String(70), primary_key=True)
@@ -30,7 +30,7 @@ class Organization(db.Model):
 
 
 class Relationship(db.Model):
-    __bind_key__ = 'neo4j'
+    # __bind_key__ = 'neo4j'
     __tablename__ = 'relationship'
     
     id = db.Column(db.String(100), primary_key=True)

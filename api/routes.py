@@ -2,7 +2,8 @@ from flask import current_app as app
 
 from .utils import read_csv_file, remove_extra_keys
 from .models import Person, Organization, Relationship
-from . import db
+from .db_connection.neo4j_connection import Neo4jConnection
+
 
 @app.route('/', methods=['GET'])
 def root():
@@ -14,24 +15,30 @@ def hello_world():
     return 'Hello world!'
 
 
+@app.route('/clear/neo', methods=['GET'])
+def clear_neo():
+    conn = Neo4jConnection()
+    conn.clear_database()
+    return 'Success'
+
+
 @app.route('/build', methods=['GET'])
 def build():
     data = read_csv_file()
+    people = []
+    organizations = []
+    memberships = {}
 
     for d in data:
         person_mapper = remove_extra_keys(d, Person)
-        person = Person(**person_mapper)
+        people.append(Person(**person_mapper))
 
         organization_mapper = remove_extra_keys(d, Organization)
-        organization = Organization(**organization_mapper)
-        
-        relationship_mapper = {'id': d['id'], 'group_id': d['group_id']}
-        relationship = Relationship(**relationship_mapper)
+        organizations.append(Organization(**organization_mapper))
 
-        db.session.add(person)
-        db.session.add(organization)
-        db.session.add(relationship)
+        memberships[d['id']] = d['group_id']
 
-        db.session.commit()
-    
-    return 'Commited'
+    conn = Neo4jConnection()
+    conn.build(people, organizations, memberships)
+    conn.close()
+    return 'test'

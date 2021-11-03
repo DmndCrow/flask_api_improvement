@@ -7,6 +7,8 @@ from . import utils
 load_dotenv()
 db = SQLAlchemy()
 
+from . import db_connection
+
 
 def create_app():
     app = Flask(__name__, instance_relative_config=False)

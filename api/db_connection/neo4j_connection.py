@@ -97,12 +97,12 @@ class Neo4jConnection:
         self.session.write_transaction(self._delete_organization, _group_id)
 
     def build(self, people: List[Person], organizations: List[Organization], memberships: Dict[str, str]) -> None:
-        self.session.write_transaction(
-            self._create_multiple_people, [person.id for person in people]
-        )
-        self.session.write_transaction(
-            self._create_multiple_organizations, [org.group_id for org in organizations]
-        )
+        # self.session.write_transaction(
+        #     self._create_multiple_people, [person.id for person in people]
+        # )
+        # self.session.write_transaction(
+        #     self._create_multiple_organizations, [org.group_id for org in organizations]
+        # )
         self.session.write_transaction(self._create_multiple_memberships, memberships)
 
     @staticmethod
@@ -155,9 +155,9 @@ class Neo4jConnection:
         for key in memberships:
             group_id = memberships[key]
             tx.run(
-                "MATCH (p: Person {id: $id})"
-                "MATCH (o: Organization {group_id: $group_id})"
-                "MERGE (p)-[Memberships:MEMBER_OF]->(o)",
+                'MERGE (p: Person {id: $id})'
+                'MERGE (o: Organization {group_id: $group_id})'
+                'MERGE (p)-[Memberships:MEMBER_OF]->(o)',
                 id=key, group_id=group_id
             )
 

@@ -3,7 +3,7 @@ from typing import List, Dict
 from neo4j import GraphDatabase
 from dotenv import load_dotenv
 
-from api.models import Person, Organization
+from api.models import Person, Organization, Membership
 from flask_config import DbConfig
 
 load_dotenv()
@@ -96,7 +96,7 @@ class Neo4jConnection:
         """
         self.session.write_transaction(self._delete_organization, _group_id)
 
-    def build(self, people: List[Person], organizations: List[Organization], memberships: Dict[str, str]) -> None:
+    def build(self, people: List[Person], organizations: List[Organization], memberships: List[Membership]) -> None:
         # self.session.write_transaction(
         #     self._create_multiple_people, [person.id for person in people]
         # )
@@ -151,14 +151,13 @@ class Neo4jConnection:
             print('neo4j create', group_id)
 
     @staticmethod
-    def _create_multiple_memberships(tx, memberships: Dict[str, str]) -> None:
-        for key in memberships:
-            group_id = memberships[key]
+    def _create_multiple_memberships(tx, memberships: List[Membership]) -> None:
+        for membership in memberships:
             tx.run(
                 'MERGE (p: Person {id: $id})'
                 'MERGE (o: Organization {group_id: $group_id})'
                 'MERGE (p)-[Memberships:MEMBER_OF]->(o)',
-                id=key, group_id=group_id
+                id=membership.id, group_id=membership.group_id
             )
 
     @staticmethod

@@ -3,9 +3,6 @@ from . import db
 
 
 class Person(db.Model):
-    # __bind_key__ = 'elastic'
-    __tablename__ = 'person'
-
     id = db.Column(db.String(100), primary_key=True)
     name = db.Column(db.String(100))
     sort_name = db.Column(db.String(100))
@@ -20,18 +17,12 @@ class Person(db.Model):
 
 
 class Organization(db.Model):
-    # __bind_key__ = 'elastic'
-    __tablename__ = 'organization'
-
     group_id = db.Column(db.String(70), primary_key=True)
     group = db.Column(db.String(100))
 
     wikidata_group = db.Column(db.String(20))
 
 
-class Relationship(db.Model):
-    # __bind_key__ = 'neo4j'
-    __tablename__ = 'relationship'
-    
+class Membership(db.Model):
     id = db.Column(db.String(100), primary_key=True)
     group_id = db.Column(db.String(70), primary_key=True)

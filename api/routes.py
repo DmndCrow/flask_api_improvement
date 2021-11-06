@@ -1,8 +1,11 @@
+from typing import List
+
 from flask import current_app as app
 
 from .utils import read_csv_file, remove_extra_keys
-from .models import Person, Organization, Relationship
+from .models import Person, Organization, Membership
 from .db_connection.neo4j_connection import Neo4jConnection
+from .db_connection.elastic_connection import ElasticConnection
 
 
 @app.route('/', methods=['GET'])
@@ -25,20 +28,21 @@ def clear_neo():
 @app.route('/build', methods=['GET'])
 def build():
     data = read_csv_file()
-    people = []
-    organizations = []
-    memberships = {}
+    people: List[Person] = []
+    organizations: List[Organization] = []
+    memberships: List[Membership] = []
 
-    for d in data:
-        person_mapper = remove_extra_keys(d, Person)
-        people.append(Person(**person_mapper))
-
-        organization_mapper = remove_extra_keys(d, Organization)
-        organizations.append(Organization(**organization_mapper))
-
-        memberships[d['id']] = d['group_id']
+    for row in data:
+        people.append(remove_extra_keys(row, Person))
+        organizations.append(remove_extra_keys(row, Organization))
+        memberships.append(remove_extra_keys(row, Membership))
 
     conn = Neo4jConnection()
     conn.build(people, organizations, memberships)
     conn.close()
+
+    es_conn = ElasticConnection()
+    es_conn.build(people, organizations)
+    es_conn.close()
+
     return 'test'

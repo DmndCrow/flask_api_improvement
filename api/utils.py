@@ -37,4 +37,4 @@ def remove_extra_keys(dictionary, model):
         if k in mapper.attrs.keys()
     }
 
-    return mapped_model_keys
+    return model(**mapped_model_keys)

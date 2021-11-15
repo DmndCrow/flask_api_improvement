@@ -1,8 +1,13 @@
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
+from flask import send_from_directory
+from flask_swagger_ui import get_swaggerui_blueprint
+
 
 load_dotenv()
+BASE_PATH = Path(__file__).resolve().parent
 
 
 class DbConfig:

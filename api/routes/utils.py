@@ -12,12 +12,7 @@ utils_bp = Blueprint('utils_bp', __name__)
 
 @utils_bp.route('/', methods=['GET'])
 def root():
-    return redirect(url_for('swagger'))
-
-
-@utils_bp.route('/api/swagger', methods=['GET'])
-def swagger():
-    return 'swagger ui'
+    return redirect('/api/swagger')
 
 
 @utils_bp.route('/clear/neo', methods=['GET'])

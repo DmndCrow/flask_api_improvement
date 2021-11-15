@@ -12,7 +12,7 @@ def organization_handle():
         return jsonify({'message': 'created org1'}), 201
 
 
-@organization_bp.route('/<_id>', methods=['GET', 'PUT', 'DELETE'])
+@organization_bp.route('/<string:_id>', methods=['GET', 'PUT', 'DELETE'])
 def organization_handle_by_id(_id: str):
     if request.method == 'GET':
         return jsonify({'data': 'org1'}), 200

@@ -15,7 +15,7 @@ def membership_handle():
         return jsonify({'message': 'created mem1'}), 201
 
 
-@membership_bp.route('/<_id>', methods=['GET', 'PUT', 'DELETE'])
+@membership_bp.route('/<string:_id>', methods=['GET', 'PUT', 'DELETE'])
 def membership_handle_by_id(_id: str):
     if request.method == 'GET':
         return jsonify({'data': 'mem1'}), 200

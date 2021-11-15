@@ -1,6 +1,9 @@
+import os
+
 from flask import Flask
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from . import utils
 
@@ -10,11 +13,21 @@ db = SQLAlchemy()
 from . import db_connection
 
 
+def get_swagger():
+    swagger_url = '/api/swagger'
+    api_url = '/static/swagger.json'
+    swagger_bp = get_swaggerui_blueprint(swagger_url, api_url)
+    return swagger_bp, swagger_url
+
+
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('flask_config.DbConfig')
     app.config.from_object('flask_config.Config')
-    
+
+    swagger_bp, swagger_url = get_swagger()
+    app.register_blueprint(swagger_bp, url_prefix=swagger_url)
+
     db.init_app(app)
 
     with app.app_context():

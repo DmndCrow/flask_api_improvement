@@ -13,7 +13,7 @@ def person_handle():
         return jsonify({'message': 'created user1'}), 201
 
 
-@person_bp.route('/<_id>', methods=['GET', 'PUT', 'DELETE'])
+@person_bp.route('/<string:_id>', methods=['GET', 'PUT', 'DELETE'])
 def person_handle_by_id(_id: str):
     if request.method == 'GET':
         return jsonify({'data': 'user1'}), 200

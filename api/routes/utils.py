@@ -1,31 +1,33 @@
 from typing import List
 
-from flask import current_app as app
+from flask import Blueprint, redirect, url_for
 
-from .utils import read_csv_file, remove_extra_keys
-from .models import Person, Organization, Membership
-from .db_connection.neo4j_connection import Neo4jConnection
-from .db_connection.elastic_connection import ElasticConnection
+from api.models import Person, Organization, Membership
+from api.db_connection.neo4j_connection import Neo4jConnection
+from api.db_connection.elastic_connection import ElasticConnection
+from api.utils import read_csv_file, remove_extra_keys
+
+utils_bp = Blueprint('utils_bp', __name__)
 
 
-@app.route('/', methods=['GET'])
+@utils_bp.route('/', methods=['GET'])
 def root():
-    return 'Root'
+    return redirect(url_for('swagger'))
 
 
-@app.route('/hello', methods=['GET'])
-def hello_world():
-    return 'Hello world!'
+@utils_bp.route('/api/swagger', methods=['GET'])
+def swagger():
+    return 'swagger ui'
 
 
-@app.route('/clear/neo', methods=['GET'])
+@utils_bp.route('/clear/neo', methods=['GET'])
 def clear_neo():
     conn = Neo4jConnection()
     conn.clear_database()
     return 'Success'
 
 
-@app.route('/build', methods=['GET'])
+@utils_bp.route('/api/build', methods=['GET'])
 def build():
     data = read_csv_file()
     people: List[Person] = []

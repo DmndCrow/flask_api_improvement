@@ -51,7 +51,7 @@ class ElasticConnection:
         for organization in organizations:
             self.create_object('organization', organization, organization.group_id)
 
-    def create_object(self, index: str, model: Union[Person, Organization], _id: str) -> Union[Person, Organization]:
+    def create_object(self, index: str, model: Union[Person, Organization], _id: str):
         """
         Create new person
         @param index: model index in elasticsearch
@@ -68,14 +68,14 @@ class ElasticConnection:
             body = model.__dict__
             del body['_sa_instance_state']
 
-            self.es.index(
+            es_response = self.es.index(
                 index=index,
                 doc_type=self.doc,
                 id=_id,
                 body=body
             )
-            return model
-        return None
+            return self.get_object_by_id(index, _id)
+        return None, 403
 
     def close(self):
         self.es.transport.close()

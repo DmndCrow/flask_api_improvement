@@ -3,6 +3,7 @@ import sys
 import csv
 
 from sqlalchemy.orm import class_mapper
+from sqlalchemy import inspect
 
 
 def get_csv_fields():
@@ -36,5 +37,11 @@ def remove_extra_keys(dictionary, model):
         k: v for k, v in dictionary.items()
         if k in mapper.attrs.keys()
     }
+
+    inst = inspect(model)
+    attr_names = [c_attr.key for c_attr in inst.mapper.column_attrs]
+    for key in attr_names:
+        if key not in mapped_model_keys:
+            mapped_model_keys[key] = ''
 
     return model(**mapped_model_keys)

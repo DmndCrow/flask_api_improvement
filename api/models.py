@@ -3,7 +3,7 @@ from . import db
 
 
 class Person(db.Model):
-    id = db.Column(db.String(100), primary_key=True, default=str(uuid.uuid4()))
+    id = db.Column(db.String(100), primary_key=True)
     name = db.Column(db.String(100))
     sort_name = db.Column(db.String(100))
     gender = db.Column(db.String(20))

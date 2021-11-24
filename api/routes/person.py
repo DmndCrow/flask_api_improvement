@@ -27,7 +27,8 @@ def person_handle_by_id(_id: str):
         return jsonify({'response': person}), status_code
 
     if request.method == 'PUT':
-        return jsonify({'message': 'updated user1'}), 201
+        person, status_code = DbConnection().update_person(_id, request.get_json())
+        return jsonify({'response': person}), status_code
 
     if request.method == 'DELETE':
         return jsonify({'message': 'deleted user1'}), 202

@@ -23,7 +23,8 @@ def organization_handle_by_id(_id: str):
         return jsonify({'response': organization}), status_code
 
     if request.method == 'PUT':
-        return jsonify({'message': 'updated org1'}), 201
+        organization, status_code = DbConnection().update_organization(_id, request.get_json())
+        return jsonify({'response': organization}), status_code
 
     if request.method == 'DELETE':
         return jsonify({'message': 'deleted org1'}), 202

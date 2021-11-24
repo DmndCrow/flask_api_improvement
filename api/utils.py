@@ -30,7 +30,7 @@ def read_csv_file():
     return data
 
 
-def remove_extra_keys(dictionary, model):
+def remove_extra_keys(dictionary, model, original=None):
     mapper = class_mapper(model)
 
     mapped_model_keys = {
@@ -43,5 +43,10 @@ def remove_extra_keys(dictionary, model):
     for key in attr_names:
         if key not in mapped_model_keys:
             mapped_model_keys[key] = ''
+
+    if original:
+        for key in attr_names:
+            if key not in dictionary:
+                mapped_model_keys[key] = original[key]
 
     return model(**mapped_model_keys)

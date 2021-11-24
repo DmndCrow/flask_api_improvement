@@ -8,7 +8,7 @@ class Person(db.Model):
     sort_name = db.Column(db.String(100))
     gender = db.Column(db.String(20))
     image = db.Column(db.String(100), default='')
-    nationality = db.Column(db.String(10), server_default='GB')
+    nationality = db.Column(db.String(10))
 
     email = db.Column(db.String(100), unique=True)
     twitter = db.Column(db.String(100), default='')

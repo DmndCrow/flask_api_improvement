@@ -53,7 +53,7 @@ class ElasticConnection:
 
     def create_object(self, index: str, model: Union[Person, Organization], _id: str):
         """
-        Create new person
+        Create new person or organization
         @param index: model index in elasticsearch
         @type index: str
         @param model: to be created Person or Organization
@@ -68,7 +68,7 @@ class ElasticConnection:
             body = model.__dict__
             del body['_sa_instance_state']
 
-            es_response = self.es.index(
+            self.es.index(
                 index=index,
                 doc_type=self.doc,
                 id=_id,
@@ -76,6 +76,32 @@ class ElasticConnection:
             )
             return self.get_object_by_id(index, _id)
         return None, 403
+
+    def update_object(self, index: str, model: Union[Person, Organization], _id: str):
+        """
+        Update person or organization
+        @param index: model index in elasticsearch
+        @type index: str
+        @param model: to be created Person or Organization
+        @type model: Person or Organization
+        @param _id: id of to be created Person or Organization
+        @type _id: str
+        @return: created person or organization
+        @rtype: Person or Organization
+        """
+        res, code = self.get_object_by_id(index, _id)
+        if code == 200:
+            body = model.__dict__
+            del body['_sa_instance_state']
+
+            self.es.update(
+                index=index,
+                doc_type=self.doc,
+                id=_id,
+                body={'doc': body}
+            )
+            return self.get_object_by_id(index, _id)
+        return None, 404
 
     def close(self):
         self.es.transport.close()

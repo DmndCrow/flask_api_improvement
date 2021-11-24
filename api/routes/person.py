@@ -31,4 +31,5 @@ def person_handle_by_id(_id: str):
         return jsonify({'response': person}), status_code
 
     if request.method == 'DELETE':
-        return jsonify({'message': 'deleted user1'}), 202
+        response, status_code = DbConnection().delete_person(_id)
+        return jsonify({'response': response}), status_code

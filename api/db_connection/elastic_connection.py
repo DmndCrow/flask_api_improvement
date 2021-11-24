@@ -103,5 +103,17 @@ class ElasticConnection:
             return self.get_object_by_id(index, _id)
         return None, 404
 
+    def delete_object(self, index: str, _id: str):
+        res, code = self.get_object_by_id(index, _id)
+        if code == 200:
+            self.es.delete(
+                index=index,
+                doc_type=self.doc,
+                id=_id
+            )
+            return 200
+        else:
+            return 404
+
     def close(self):
         self.es.transport.close()

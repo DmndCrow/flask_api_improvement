@@ -45,6 +45,13 @@ class DbConnection:
             return organization[0] if len(organization) else None, status_code
         return None, status_code
 
+    def delete_organization(self, organization_id: str) -> Tuple[str, int]:
+        status_code = self.elastic.delete_object('organization', organization_id)
+        if self.ok(status_code):
+            #  delete relation in neo4j
+            return 'organization removed', status_code
+        return 'failed to remove organization', status_code
+
     def get_people(self) -> Tuple[List[Dict], int]:
         person_set_response = []
 
@@ -78,6 +85,13 @@ class DbConnection:
             person, status_code = self.elastic.update_object('person', person_body, person_id)
             return person[0] if len(person) else None, status_code
         return None, status_code
+
+    def delete_person(self, person_id: str) -> Tuple[str, int]:
+        status_code = self.elastic.delete_object('person', person_id)
+        if self.ok(status_code):
+            #  delete relation in neo4j
+            return 'person removed', status_code
+        return 'failed to remove person', status_code
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.elastic.close()

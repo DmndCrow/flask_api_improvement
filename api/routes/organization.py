@@ -27,4 +27,5 @@ def organization_handle_by_id(_id: str):
         return jsonify({'response': organization}), status_code
 
     if request.method == 'DELETE':
-        return jsonify({'message': 'deleted org1'}), 202
+        response, status_code = DbConnection().delete_organization(_id)
+        return jsonify({'response': response}), status_code
